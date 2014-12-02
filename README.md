@@ -6,8 +6,10 @@ growing kind of large, so I started a second.
 
 ## In This Repo
 
-* Exercises from [backbonetutorials.com](http://backbonetutorials.com/)
-* Exercises from the book [Node.js the Right Way: Practical, Server-Side JavaScript That Scales](https://pragprog.com/book/jwnode/node-js-the-right-way)
+* **backbonetutorials.com:** Exercises from [backbonetutorials.com](http://backbonetutorials.com/)
+  (copied from [polyglot](https://github.com/jdantonio/polyglot))
+* **node.js:** Exercises from the book [Node.js the Right Way: Practical, Server-Side JavaScript That Scales](https://pragprog.com/book/jwnode/node-js-the-right-way)
+  (copied from [polyglot](https://github.com/jdantonio/polyglot))
 
 ## Copyright
 
