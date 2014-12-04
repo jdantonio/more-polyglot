@@ -5,7 +5,9 @@
   "author": "Jerry D'Antonio <jerry.dantonio@gmail.com> (http://jerrydantonio.com)",
   "license": "MIT",
   "dependencies": {
+    "async": "^0.9.0",
     "cheerio": "^0.18.0",
+    "file": "^0.2.2",
     "minimist": "^1.1.0",
     "request": "^2.49.0"
   }
