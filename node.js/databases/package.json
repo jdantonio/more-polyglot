@@ -1,0 +1,12 @@
+{
+  "name": "jdantonio-book-tools",
+  "version": "0.1.0",
+  "description": "Tools for creating an ebook database.",
+  "author": "Jerry D'Antonio <jerry.dantonio@gmail.com> (http://jerrydantonio.com)",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^0.18.0",
+    "minimist": "^1.1.0",
+    "request": "^2.49.0"
+  }
+}
