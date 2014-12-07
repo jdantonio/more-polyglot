@@ -1,0 +1,14 @@
+{
+  "name": "jdantonio-book-tools",
+  "version": "0.1.0",
+  "description": "Simple web service (tutorial).",
+  "author": "Jerry D'Antonio <jerry.dantonio@gmail.com> (http://jerrydantonio.com)",
+  "license": "MIT",
+  "scripts": {
+    "start": "node --harmony ./server.js"
+  },
+  "dependencies": {
+    "express": "^4.10.4",
+    "morgan": "^1.5.0"
+  }
+}
