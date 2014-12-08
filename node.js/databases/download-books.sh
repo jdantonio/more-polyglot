@@ -18,6 +18,9 @@ cp cache/epub/132/pg132.rdf test/
 #echo 'Importing books into the database...'
 #./import-books.js
 
+#echo 'Creating the map/reduce views...'
+#./make-views.js
+
 #$ ./dbcli.js -m GET -p books
 #$ ./dbcli.js -m GET -p books/0
 #200 { _id: '0',

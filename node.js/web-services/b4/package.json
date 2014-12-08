@@ -1,0 +1,18 @@
+{
+  "name": "jdantonio-b4-tutorial",
+  "version": "0.1.0",
+  "description": "Book bundler web service (tutorial).",
+  "author": "Jerry D'Antonio <jerry.dantonio@gmail.com> (http://jerrydantonio.com)",
+  "license": "MIT",
+  "scripts": {
+    "start": "node --harmony ./server.js"
+  },
+  "dependencies": {
+    "express": "~3.3.8",
+    "connect-redis": "~1.4.5",
+    "request": "~2.27.0",
+    "passport": "~0.1.17",
+    "passport-google": "~0.3.0",
+    "q": "~0.9.7"
+  }
+}
