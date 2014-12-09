@@ -11,19 +11,7 @@ class Player
       last_game_state
     )
 
-    if warrior.confronted_by?(:enemy)
-      warrior.attack!
-    elsif warrior.taken_damage?
-      if warrior.taking_damage?
-        warrior.walk!(:forward)
-      else
-        warrior.rest!
-      end
-    elsif warrior.can_move?(:forward)
-      warrior.walk!(:forward)
-    else
-      raise UnexpectedGameStateError
-    end
+    Strategy.press_forward_and_attack(warrior)
 
     save_current_game_state(warrior)
   end
@@ -78,5 +66,25 @@ class DecoratedWarrior < SimpleDelegator
 
   def taken_damage?
     __getobj__.health < @initial_game_state.warrior_health
+  end
+end
+
+module Strategy
+  extend self
+
+  def press_forward_and_attack(warrior)
+    if warrior.confronted_by?(:enemy)
+      warrior.attack!
+    elsif warrior.taken_damage?
+      if warrior.taking_damage?
+        warrior.walk!(:forward)
+      else
+        warrior.rest!
+      end
+    elsif warrior.can_move?(:forward)
+      warrior.walk!(:forward)
+    else
+      raise UnexpectedGameStateError
+    end
   end
 end
