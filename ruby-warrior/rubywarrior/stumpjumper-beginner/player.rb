@@ -1,28 +1,25 @@
+require 'delegate'
+
 UnexpectedGameStateError = Class.new(StandardError)
-
-class GameState
-
-  attr_reader :warrior_health
-  
-  def initialize(warrior)
-    @warrior_health = warrior.health
-  end
-end
 
 class Player
 
-  def play_turn(warrior)
-    init_state = initial_game_state(warrior)
+  def play_turn(undecorated_warrior)
+    warrior = DecoratedWarrior.new(
+      undecorated_warrior,
+      initial_game_state(undecorated_warrior),
+      last_game_state
+    )
 
-    if confronted_by?(:enemy, warrior)
+    if warrior.confronted_by?(:enemy)
       warrior.attack!
-    elsif taken_damage?(warrior, init_state)
-      if taken_damage?(warrior, last_game_state)
+    elsif warrior.taken_damage?
+      if warrior.taking_damage?
         warrior.walk!(:forward)
       else
         warrior.rest!
       end
-    elsif can_move_forward?(warrior)
+    elsif warrior.can_move?(:forward)
       warrior.walk!(:forward)
     else
       raise UnexpectedGameStateError
@@ -46,20 +43,40 @@ class Player
   def save_current_game_state(warrior)
     @last_game_state = GameState.new(warrior).freeze
   end
+end
 
-  ## warrior status
+class GameState
 
-  def can_move_forward?(warrior)
-    warrior.feel(:forward).empty?
+  attr_reader :warrior_health
+
+  def initialize(warrior)
+    @warrior_health = warrior.health
+  end
+end
+
+class DecoratedWarrior < SimpleDelegator
+
+  def initialize(warrior, initial_game_state, last_game_state)
+    super(warrior)
+    @initial_game_state = initial_game_state
+    @last_game_state = last_game_state
   end
 
-  def confronted_by?(entity, warrior)
-    warrior.feel(:forward).send("#{entity}?".to_sym)
+  def can_move?(direction = :forward)
+    __getobj__.feel(direction.to_sym).empty?
+  end
+
+  def confronted_by?(entity)
+    __getobj__.feel(:forward).send("#{entity}?".to_sym)
   rescue NoMethodError
     false
   end
 
-  def taken_damage?(warrior, game_state)
-    warrior.health < game_state.warrior_health
+  def taking_damage?
+    __getobj__.health < @last_game_state.warrior_health
+  end
+
+  def taken_damage?
+    __getobj__.health < @initial_game_state.warrior_health
   end
 end
