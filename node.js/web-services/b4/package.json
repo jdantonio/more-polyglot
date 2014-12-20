@@ -1,9 +1,8 @@
 {
-  "name": "jdantonio-b4-tutorial",
+  "name": "b4",
   "version": "0.1.0",
-  "description": "Book bundler web service (tutorial).",
-  "author": "Jerry D'Antonio <jerry.dantonio@gmail.com> (http://jerrydantonio.com)",
-  "license": "MIT",
+  "description": "B4, The Better Book Bundle Builder.",
+  "author": "Your Name <you@yoursite.com> (http://yoursite.com/path)",
   "scripts": {
     "start": "node --harmony ./server.js"
   },
