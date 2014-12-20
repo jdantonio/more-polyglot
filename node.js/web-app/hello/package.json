@@ -1,18 +1,14 @@
 {
   "name": "jdantonio-book-tools",
   "version": "0.1.0",
-  "description": "Simple web service (tutorial).",
+  "description": "Simple web app (tutorial).",
   "author": "Jerry D'Antonio <jerry.dantonio@gmail.com> (http://jerrydantonio.com)",
-  "license": "MIT",
   "scripts": {
     "start": "node --harmony ./server.js"
   },
   "dependencies": {
-    "express": "~3.3.8",
+    "redis": "~0.8.5",
     "connect-redis": "~1.4.5",
-    "request": "~2.27.0",
-    "passport": "~0.1.17",
-    "passport-google": "~0.3.0",
-    "q": "~0.9.7"
+    "express": "~3.4.0"
   }
 }
