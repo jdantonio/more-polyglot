@@ -11,14 +11,14 @@
 <title>Popular Subreddits</title>
 
 <!-- Bootstrap core CSS -->
-<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link href="./css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Custom styles for this template -->
-<link href="/css/jumbotron.css" rel="stylesheet">
+<link href="./css/jumbotron.css" rel="stylesheet">
 
 <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
 <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-<script src="/js/ie-emulation-modes-warning.js"></script>
+<script src="./js/ie-emulation-modes-warning.js"></script>
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -67,7 +67,7 @@
 
     <% if (index+1) % 3 == 0 || index == subreddits.length-1%></div><% end %>
 <% end %>
-->>
+-->
 
   <hr>
 
@@ -80,9 +80,49 @@
 <!-- Bootstrap core JavaScript
     ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
+<script src="./js/jquery-1.11.2.js"></script>
+<script src="./js/bootstrap.min.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="/js/ie10-viewport-bug-workaround.js"></script>
+<script src="./js/ie10-viewport-bug-workaround.js"></script>
+
+<script>
+var base_url = 'http://www.reddit.com/';
+
+function getLimitQS(max) {
+  return (max === undefined ? '' : '?limit=' + max);
+}
+
+function asyncPopularSubreddits(max) {
+  var limit = getLimitQS(max);
+
+  $.getJSON(base_url + 'subreddits/popular.json' + limit, function(response){
+    $.each(response.data.children, function(index, child){
+      var subreddit = child.data.display_name;
+      asyncHotTopics(subreddit, 4);
+    });
+  });
+}
+
+function asyncHotTopics(subreddit, max) {
+  var limit = getLimitQS(max);
+
+  $.getJSON(base_url + '/r/' + subreddit + '/hot.json' + limit , function(response){
+    $.each(response.data.children, function(index, child){
+      var topic = {
+        subreddit: subreddit,
+        title: child.data.title,
+        url: child.data.url
+      };
+      console.log(topic);
+    });
+  });
+}
+
+$(document).ready(function(){
+    asyncPopularSubreddits(3);
+});
+
+</script>
+
 </body>
 </html>
