@@ -114,15 +114,39 @@
 // of items already fetched.
 
 var base_url = 'http://www.reddit.com/';
+var count = 0;
+var after = null;
 
-function getLimitQS(max) {
-  return (max === undefined ? '' : '?limit=' + max);
+function buildQS(options) {
+  var data = $.extend({
+    after: after,
+    count: count,
+    limit: 25
+  }, options);
+
+  var qs = '?';
+
+  for (var key in data) {
+    if (data[key] !== undefined) {
+      qs += key + '=' + data[key] + '&'
+    }
+  }
+
+  console.log(qs);
+  return qs;
 }
 
-function asyncPopularSubreddits(max) {
-  var limit = getLimitQS(max);
+function asyncPopularSubreddits(limit) {
+  var qs = buildQS({limit: limit});
 
-  $.getJSON(base_url + 'subreddits/popular.json' + limit, function(response){
+  $.getJSON(base_url + 'subreddits/popular.json' + qs, function(response){
+
+    after = response.data.after
+    count += response.data.children.length;
+
+    console.log('after: ' + after);
+    console.log('count: ' + count);
+
     var subreddits = $.map(response.data.children, function(child){
       var subreddit = child.data.display_name;
       return {
@@ -136,15 +160,18 @@ function asyncPopularSubreddits(max) {
         console.log(arguments[i]);
       }
       console.log('all done');
+      if (count < 9) {
+        asyncPopularSubreddits(3);
+      }
     });
   });
 }
 
-function hotTopicsDeferred(subreddit, max) {
-  var limit = getLimitQS(max);
+function hotTopicsDeferred(subreddit, limit) {
+  var qs = buildQS({limit: limit});
   var promise = $.Deferred();
 
-  $.getJSON(base_url + '/r/' + subreddit + '/hot.json' + limit , function(response){
+  $.getJSON(base_url + '/r/' + subreddit + '/hot.json' + qs , function(response){
     var topics = $.map(response.data.children, function(child){
       return {
         subreddit: subreddit,
