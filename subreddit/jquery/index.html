@@ -96,30 +96,43 @@ function asyncPopularSubreddits(max) {
   var limit = getLimitQS(max);
 
   $.getJSON(base_url + 'subreddits/popular.json' + limit, function(response){
-    $.each(response.data.children, function(index, child){
+    var subreddits = $.map(response.data.children, function(child){
       var subreddit = child.data.display_name;
-      asyncHotTopics(subreddit, 4);
+      return {
+        subreddit: subreddit,
+        topics: hotTopicsDeferred(subreddit, 4)
+      };
+    });
+
+    $.when.apply(null, subreddits).done(function(){
+      for (var i = 0; i < arguments.length; i++) {
+        console.log(arguments[i]);
+      }
+      console.log('all done');
     });
   });
 }
 
-function asyncHotTopics(subreddit, max) {
+function hotTopicsDeferred(subreddit, max) {
   var limit = getLimitQS(max);
+  var promise = $.Deferred();
 
   $.getJSON(base_url + '/r/' + subreddit + '/hot.json' + limit , function(response){
-    $.each(response.data.children, function(index, child){
-      var topic = {
+    var topics = $.map(response.data.children, function(child){
+      return {
         subreddit: subreddit,
         title: child.data.title,
         url: child.data.url
       };
-      console.log(topic);
     });
+    promise.resolve(topics);
   });
+
+  return promise;
 }
 
 $(document).ready(function(){
-    asyncPopularSubreddits(3);
+  asyncPopularSubreddits(3);
 });
 
 </script>
