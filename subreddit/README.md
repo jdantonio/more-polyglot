@@ -19,7 +19,7 @@ We're designing an alternative interface for Reddit. If you're not familiar with
 
 ## Copyright
 
-Copyright &copy; 2013 [Jerry D'Antonio](https://twitter.com/jerrydantonio).
+Copyright &copy; 2014 [Jerry D'Antonio](https://twitter.com/jerrydantonio).
 It is free software and may be redistributed under the terms specified in
 the LICENSE file.
 
