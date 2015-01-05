@@ -43,7 +43,6 @@
   </div>
 </div>
 
-<!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
   <div class="container">
     <h1>Popular Subreddits</h1>
@@ -75,7 +74,6 @@
   </footer>
 </div>
 
-
 <script src="./js/jquery-1.11.2.js"></script>
 <script src="./js/handlebars-v2.0.0.js"></script>
 <script src="./js/handlebars-truncate-helper.js"></script>
@@ -86,27 +84,26 @@
 <script src="./application.js"></script>
 
 <script>
+  var dataIsLoading = false;
 
-var dataIsLoading = false;
-
-function doneLoadingData() {
+  function doneLoadingData() {
   dataIsLoading = false;
-}
-
-function loadMoreData() {
-  if (!dataIsLoading && $(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
-    dataIsLoading = true;
-    SUBREDDIT.popularSubreddits(3, doneLoadingData);
   }
-}
 
-$(document).ready(function() {
-  SUBREDDIT.popularSubreddits(12, doneLoadingData);
+  function loadMoreData() {
+    if (!dataIsLoading && $(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
+      dataIsLoading = true;
+      SUBREDDIT.popularSubreddits(3, doneLoadingData);
+    }
+  }
 
-  $(window).scroll(function() {
-    loadMoreData();
+  $(document).ready(function() {
+    SUBREDDIT.popularSubreddits(12, doneLoadingData);
+
+    $(window).scroll(function() {
+      loadMoreData();
+    });
   });
-});
 </script>
 
 </body>
