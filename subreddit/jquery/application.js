@@ -1,12 +1,15 @@
 var subreddit_display_width = 3;
 var topics_to_display = 4;
 var subreddit_container = $('.subreddit-main')
+var subreddit_template = $('#subreddit-template')
 
 var SUBREDDIT = (function (display_width) {
 
   var base_url = 'http://www.reddit.com';
   var count = 0;
   var after = null;
+
+  var template = Handlebars.compile(subreddit_template.html());
 
   function Subreddit(data) {
     this.description = data.description;
@@ -16,38 +19,6 @@ var SUBREDDIT = (function (display_width) {
     this.name = data.name;
     this.title = data.title;
     this.url = data.url;
-  };
-
-  var renderSubreddit = function(subreddit, topics) {
-    var div_width = 12 / display_width;
-    var box = $('<div>');
-    var title = $('<h2>');
-    var list = $('<ul>');
-    var subreddit_p = $('<p>');
-    var subreddit_a = $('<a>');
-
-    box.addClass('col-md-' + div_width);
-    title.text(subreddit.display_name);
-    box.append(title);
-
-    $.each(topics, function(index, topic) {
-      var li = $('<li>')
-      var topic_a = $('<a>');
-      topic_a.attr('href', topic.url);
-      topic_a.text(topic.title).succinct({size: 40});
-      li.append(topic_a);
-      list.append(li);
-    });
-    box.append(list);
-
-    subreddit_a.addClass('btn');
-    subreddit_a.addClass('btn-default');
-    subreddit_a.attr('href', base_url + subreddit.url);
-    subreddit_a.text('Visit ' + subreddit.display_name + " >>");
-    subreddit_p.append(subreddit_a);
-    box.append(subreddit_p);
-
-    return box;
   };
 
   var hotTopicsDeferred = function (subreddit, limit) {
@@ -70,9 +41,8 @@ var SUBREDDIT = (function (display_width) {
 
   return {
 
-    popularSubreddits: function (limit, container) {
+    popularSubreddits: function (limit) {
       var self = this;
-      container = container || subreddit_container;
 
       var qs = $.param({
         after: after,
@@ -98,15 +68,19 @@ var SUBREDDIT = (function (display_width) {
           row.addClass('row');
 
           $.each(arguments, function(index, item){
-            var div = renderSubreddit(subreddits[index], item);
-            row.append(div);
+            var html = template({
+              div_width: 12 / display_width,
+              subreddit: subreddits[index],
+              topics: item
+            });
+            row.append(html);
           });
 
-          container.append(row);
+          subreddit_container.append(row);
 
           limit -= display_width
           if (limit > 0) {
-            self.popularSubreddits(limit, container);
+            self.popularSubreddits(limit);
           }
         });
       });
