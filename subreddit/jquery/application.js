@@ -1,26 +1,53 @@
 var subreddit_display_width = 3;
 var topics_to_display = 4;
+var subreddit_container = $('.subreddit-main')
 
-var SUBREDDIT = (function (width) {
+var SUBREDDIT = (function (display_width) {
 
-  var base_url = 'http://www.reddit.com/';
+  var base_url = 'http://www.reddit.com';
   var count = 0;
   var after = null;
 
-  var buildQS = function (options) {
-    var data = $.extend({
-      after: after,
-      count: count,
-      limit: 25
-    }, options);
+  function Subreddit(data) {
+    this.description = data.description;
+    this.display_name = data.display_name;
+    this.header_title = data.header_title;
+    this.id = data.id;
+    this.name = data.name;
+    this.title = data.title;
+    this.url = data.url;
+  };
 
-    var qs = '?';
+  var renderSubreddit = function(subreddit, topics) {
+    var div_width = 12 / display_width;
+    var box = $('<div>');
+    var title = $('<h2>');
+    var list = $('<ul>');
+    var subreddit_p = $('<p>');
+    var subreddit_a = $('<a>');
 
-    for (var key in data) {
-      qs += key + '=' + data[key] + '&'
-    }
+    box.addClass('col-md-' + div_width);
+    title.text(subreddit.display_name);
+    box.append(title);
 
-    return qs;
+    $.each(topics, function(index, topic) {
+      var li = $('<li>')
+      var topic_a = $('<a>');
+      topic_a.attr('href', topic.url);
+      topic_a.text(topic.title).succinct({size: 40});
+      li.append(topic_a);
+      list.append(li);
+    });
+    box.append(list);
+
+    subreddit_a.addClass('btn');
+    subreddit_a.addClass('btn-default');
+    subreddit_a.attr('href', base_url + subreddit.url);
+    subreddit_a.text('Visit ' + subreddit.display_name + " >>");
+    subreddit_p.append(subreddit_a);
+    box.append(subreddit_p);
+
+    return box;
   };
 
   var hotTopicsDeferred = function (subreddit, limit) {
@@ -43,35 +70,43 @@ var SUBREDDIT = (function (width) {
 
   return {
 
-    asyncPopularSubreddits: function (limit) {
+    popularSubreddits: function (limit, container) {
       var self = this;
-      var qs = buildQS({limit: width});
+      container = container || subreddit_container;
 
-      $.getJSON(base_url + 'subreddits/popular.json' + qs, function(response) {
+      var qs = $.param({
+        after: after,
+        count: count,
+        limit: display_width
+      });
+
+      $.getJSON(base_url + '/subreddits/popular.json?' + qs, function(response) {
 
         after = response.data.after
         count += response.data.children.length;
 
         // for all subreddits, make AJAX calls for the topics
+        var topics = [];
         var subreddits = $.map(response.data.children, function(child) {
-          var subreddit = child.data.display_name;
-          return {
-            subreddit: subreddit,
-            topics: hotTopicsDeferred(subreddit)
-          };
-        });
-
-        // retrieve the deferreds from the subreddits collection
-        var topics = $.map(subreddits, function(subreddits) {
-          return subreddits.topics;
+          topics.push(hotTopicsDeferred(child.data.display_name));
+          return new Subreddit(child.data);
         });
 
         // wait for all hot topic requests to complete
         $.when.apply(null, topics).done(function(){
-          console.log(arguments);
-          limit -= width
+          var row = $('<div>');
+          row.addClass('row');
+
+          $.each(arguments, function(index, item){
+            var div = renderSubreddit(subreddits[index], item);
+            row.append(div);
+          });
+
+          container.append(row);
+
+          limit -= display_width
           if (limit > 0) {
-            self.asyncPopularSubreddits(limit);
+            self.popularSubreddits(limit, container);
           }
         });
       });

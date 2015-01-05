@@ -49,7 +49,7 @@
     <h1>Popular Subreddits</h1>
   </div>
 </div>
-<div class="container">
+<div class="container subreddit-main">
 
   <!--
   <% subreddits.each_with_index do |subreddit, index| %>
@@ -69,26 +69,24 @@
 <% end %>
 -->
 
+</div>
+<div class="container">
   <hr>
-
   <footer>
     <p>&copy; Jerry D'Antonio 2015</p>
   </footer>
-</div> <!-- /container -->
+</div>
 
 
-<!-- Bootstrap core JavaScript
-    ================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 <script src="./js/jquery-1.11.2.js"></script>
+<script src="./js/jQuery.succinct.js"></script>
 <script src="./js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="./js/ie10-viewport-bug-workaround.js"></script>
 
 <script src="./application.js"></script>
 <script>
 $(document).ready(function(){
-  SUBREDDIT.asyncPopularSubreddits(6);
+  SUBREDDIT.popularSubreddits(12);
 });
 </script>
 
