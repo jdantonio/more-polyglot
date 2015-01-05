@@ -52,19 +52,23 @@
 <div class="container subreddit-main">
 
 <script id="subreddit-template" type="text/x-handlebars-template">
-  <div class="col-md-{{div_width}}">
-    <h2>{{subreddit.display_name}}</h2>
+<div class="row">
+  {{#each subreddits}}
+  <div class="col-md-{{this.div_width}}">
+    <h2>{{this.subreddit.display_name}}</h2>
     <ul>
-      {{#each topics}}
+      {{#each this.topics}}
         <li><a href="{{this.url}}" title="{{this.title}}">{{truncate this.title 40}}</a></li>
       {{/each}}
     </ul>
-    <p><a href="{{subreddit.url}}" class="btn btn-default" role="button">Visit {{subreddit.display_name}} &raquo;</a></p>
+    <p><a href="{{this.subreddit.url}}" class="btn btn-default" role="button">Visit {{this.subreddit.display_name}} &raquo;</a></p>
   </div>
+  {{/each}}
+</div>
 </script>
 
 </div>
-<div class="container">
+<div class="container" style="height: 150px;">
   <hr>
   <footer>
     <p>&copy; Jerry D'Antonio 2015</p>
@@ -82,8 +86,26 @@
 <script src="./application.js"></script>
 
 <script>
-$(document).ready(function(){
-  SUBREDDIT.popularSubreddits(12);
+
+var dataIsLoading = false;
+
+function doneLoadingData() {
+  dataIsLoading = false;
+}
+
+function loadMoreData() {
+  if (!dataIsLoading && $(window).scrollTop() >= $(document).height() - $(window).height() - 10) {
+    dataIsLoading = true;
+    SUBREDDIT.popularSubreddits(3, doneLoadingData);
+  }
+}
+
+$(document).ready(function() {
+  SUBREDDIT.popularSubreddits(12, doneLoadingData);
+
+  $(window).scroll(function() {
+    loadMoreData();
+  });
 });
 </script>
 

@@ -1,9 +1,9 @@
 var subreddit_display_width = 3;
-var topics_to_display = 4;
+var subreddit_topics_to_display = 4;
 var subreddit_container = $('.subreddit-main')
 var subreddit_template = $('#subreddit-template')
 
-var SUBREDDIT = (function (display_width) {
+var SUBREDDIT = (function() {
 
   var base_url = 'http://www.reddit.com';
   var count = 0;
@@ -22,7 +22,7 @@ var SUBREDDIT = (function (display_width) {
   };
 
   var hotTopicsDeferred = function (subreddit, limit) {
-    limit = limit || topics_to_display
+    limit = limit || subreddit_topics_to_display
     var promise = $.Deferred();
 
     $.getJSON(base_url + '/r/' + subreddit + '/hot.json?limit=' + limit , function(response){
@@ -41,13 +41,13 @@ var SUBREDDIT = (function (display_width) {
 
   return {
 
-    popularSubreddits: function (limit) {
+    popularSubreddits: function (limit, callback) {
       var self = this;
 
       var qs = $.param({
         after: after,
         count: count,
-        limit: display_width
+        limit: subreddit_display_width
       });
 
       $.getJSON(base_url + '/subreddits/popular.json?' + qs, function(response) {
@@ -64,26 +64,30 @@ var SUBREDDIT = (function (display_width) {
 
         // wait for all hot topic requests to complete
         $.when.apply(null, topics).done(function(){
-          var row = $('<div>');
-          row.addClass('row');
 
-          $.each(arguments, function(index, item){
-            var html = template({
-              div_width: 12 / display_width,
+          var data = $.map(arguments, function(item, index){
+            return {
+              div_width: 12 / subreddit_display_width,
               subreddit: subreddits[index],
               topics: item
-            });
-            row.append(html);
+            };
           });
 
+          // process the template
+          var row = template({
+            subreddits: data
+          });
           subreddit_container.append(row);
 
-          limit -= display_width
+          // recurse or finish
+          limit -= subreddit_display_width
           if (limit > 0) {
-            self.popularSubreddits(limit);
+            self.popularSubreddits(limit, callback);
+          } else if (callback) {
+            callback();
           }
         });
       });
     }
   };
-})(subreddit_display_width);
+})();
