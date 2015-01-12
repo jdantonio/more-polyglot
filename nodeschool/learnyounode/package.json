@@ -1,0 +1,11 @@
+{
+  "name": "learnyounode",
+  "version": "1.0.0",
+  "description": "NodeSchool Exercises: Learn You Node",
+  "dependencies": {
+    "through2-map": "^1.4.0"
+  },
+  "devDependencies": {},
+  "author": "Jerry D'Antonio <jerry.dantonio@gmail.com> (http://jerrydantonio.com)",
+  "license": "MIT"
+}
