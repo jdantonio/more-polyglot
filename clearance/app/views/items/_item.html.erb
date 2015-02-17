@@ -1,0 +1,26 @@
+<table class="table-striped tablesorter" id="<%= table_id %>">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Style</th>
+      <th>Type</th>
+      <th>Size</th>
+      <th>Color</th>
+      <th>Sold Price</th>
+      <th>Date Sold</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- items.each do |item| -%>
+      <tr>
+        <td><%= item.id %></td>
+        <td><%= item.style.name %></td>
+        <td><%= item.style.type %></td>
+        <td><%= item.size %></td>
+        <td><%= item.color %></td>
+        <td><%= "$#{item.pretty_print_price_sold}" if item.price_sold %></td>
+        <td><%= l(item.sold_at, format: :short)if item.sold_at %></td>
+      </tr>
+    <%- end -%>
+  </tbody>
+</table>

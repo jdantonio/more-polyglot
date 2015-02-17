@@ -1,0 +1,124 @@
+<div class="col-md-12">
+  <table class="table-striped tablesorter" id="clearance-batch">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Style</th>
+        <th>Type</th>
+        <th>Size</th>
+        <th>Color</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <%= form_tag('#', class: 'form-inline') do %>
+    <div class="form-group">
+      <%= label_tag 'item_id', 'Enter item number' %>
+      <%= text_field_tag 'item_id', '', class: 'form-control' %>
+    </div>
+    <%= button_tag 'add item', id: 'add-item-button', class: 'btn btn-primary' %>
+  <% end %>
+</div>
+
+<div class="col-md-6">
+  <%= form_tag(clearance_batches_path, class: 'form-inline', role: 'form') do %>
+    <div class="form-group">
+      <%= label_tag 'item_ids', 'Is the batch complete?' %>
+      <%= hidden_field_tag 'item_ids', '', name: 'item_ids' %>
+    </div>
+    <%= button_tag 'submit batch', class: 'btn btn-primary' %>
+  <% end %>
+</div>
+
+<script id="clearance-item-template" type="text/x-handlebars-template">
+  <tr>
+    <td>{{item.id}}</td>
+    <td>{{item.style_name}}</td>
+    <td>{{item.style_type}}</td>
+    <td>{{item.size}}</td>
+    <td>{{item.color}}</td>
+  </tr>
+</script>
+
+<script type="text/javascript">
+
+  $(document).ready(function() {
+    $("#clearance-batch").tablesorter();
+  
+    var clearance_item_container = $('#clearance-batch');
+    var clearance_item_template = $('#clearance-item-template');
+    var template = Handlebars.compile(clearance_item_template.html());
+  
+    var inline_forms = $('.form-inline');
+    var item_input_field = $('#item_id');
+    var item_ids_field = $('#item_ids');
+    var add_item_button = $('#add-item-button');
+  
+    var items_in_batch = [];
+  
+    item_input_field.keypress(function(ev) {
+      if (ev.which === 13) {
+        ev.preventDefault();
+        addItemToBatch(ev);
+      }
+    });
+  
+    add_item_button.click(function(ev) {
+      addItemToBatch(ev);
+    });
+
+    function disableForms() {
+      inline_forms.prop('disabled', true);
+    }
+
+    function resetForms() {
+      item_input_field.val('');
+      item_input_field.focus();
+      inline_forms.prop('disabled', false);
+    }
+  
+    function addItemToBatch(ev) {
+      ev.preventDefault();
+      disableForms();
+  
+      var item_id = item_input_field.val();
+  
+      $.ajax({
+        url: '/items/' + item_id,
+        type: "GET",
+        dataType: "json",
+  
+        success: function(response) {
+          var row = template({
+            item: {
+              id: response.id,
+              style_name: response.style.name,
+              style_type: response.style.type,
+              size: response.color,
+              color: response.size
+            }
+          });
+    
+          items_in_batch.push(response.id);
+          item_ids_field.val(items_in_batch.join(","));
+          clearance_item_container.append(row);
+        },
+  
+        error: function(xhr, status, errorThrown) {
+          alert("Item number '" + item_id + "' could not be found.");
+          console.log("Error: " + errorThrown);
+          console.log("Status: " + status);
+          console.dir(xhr);
+        },
+  
+        complete: function( xhr, status ) {
+          resetForms();
+        }
+      });
+    }
+  }); 
+</script>

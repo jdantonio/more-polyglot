@@ -1,0 +1,9 @@
+<%= form_tag(clearance_batches_path, class: 'form-inline', role: 'form') do %>
+  <div class="form-group">
+    <%= label_tag 'item_ids', 'Enter item numbers' %>
+    <%= text_field_tag 'item_ids', '', class: 'form-control' %>
+  </div>
+  <%= button_tag 'submit batch', class: 'btn btn-primary' %>
+<% end %>
+
+<p class="voffset2">Please enter the item numbers separated by commas or spaces.</p>

@@ -1,0 +1,11 @@
+<h2>Clearance Batch <%= @clearance_batch.id %></h2>
+
+<%= render partial: "items/item", locals: { items: @clearance_batch.items, table_id: "clearance-batch" } %>
+
+<%= render partial: "shared/pager" %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#clearance-batch").tablesorter().tablesorterPager({container: $("#pager"), size: 20});
+  }); 
+</script>

@@ -1,0 +1,31 @@
+<h2>Inventory</h2>
+
+<div class="container">
+  <table class="table" id="statuses">
+    <tbody>
+    <tr>
+      <%- @statuses.each do |status| -%>
+        <td><%= link_to status.titleize, items_path(filter: status) %></td>
+    <%- end -%>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <p>Please select a filter from the list of statuses above.</p>
+</div>
+
+<% if @items %>
+
+  <div class="container">
+    <%= render partial: "item", locals: { items: @items, table_id: :items } %>
+    <%= render partial: "shared/pager" %>
+
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("#items").tablesorter().tablesorterPager({container: $("#pager"), size: 20});
+      });
+    </script>
+  </div>
+<% end %>
