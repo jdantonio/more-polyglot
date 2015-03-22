@@ -1,0 +1,10 @@
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
