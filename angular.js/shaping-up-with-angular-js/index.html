@@ -7,8 +7,13 @@
     <div ng-repeat="product in store.products">
       <div class="list-group-item" ng-hide="product.soldOut">
         <h1 id="name">{{ product.name }}</h1>
-        <h2 id="price">${{ product.price }}</h2>
-        <p id="description">{{ product.description }}</p>
+        <h2 id="price">{{ product.price  | currency }}</h2>
+        <p id="description">
+          {{ product.description }}
+        </p>
+        <span class="gallery" ng-show="product.images.length != 0" ng-repeat="image in product.images">
+          <img ng-src="{{ image }}"/>
+        </span>
         <button ng-show="product.canPurchase">Add to Cart</button>
       </div>
     </div>
