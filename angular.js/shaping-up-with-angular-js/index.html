@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html ng-app="gemStore">
   <head>
-    <link rel="stylesheet" type="text/css" href="../lib/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="assets/app.css" />
   </head>
   <body class="container" ng-controller="StoreController as store">
     <div ng-repeat="product in store.products">
       <div class="list-group-item" ng-hide="product.soldOut">
         <h1 id="name">{{ product.name }}</h1>
-        <h2 id="price">{{ product.price  | currency }}</h2>
+        <h2 id="price">{{product.price  | currency}}</h2>
 
         <div class='gallery'
              ng-show="product.images.length"
@@ -49,7 +49,6 @@
       </div>
     </div>
 
-    <script type="text/javascript" src="../lib/angular.min.js"></script>
-    <script type="text/javascript" src="./app.js"></script>
+    <script type="text/javascript" src="assets/app.js"></script>
   </body>
 </html>
