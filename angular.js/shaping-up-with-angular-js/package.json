@@ -1,0 +1,14 @@
+{
+  "name": "shaping-up-with-angular-js",
+  "version": "1.0.0",
+  "description": "Working project from when I worked on the CodeSchool 'Shaping Up With Amgular.js' course.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jerry D'Antonio",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "^0.4.5"
+  }
+}
