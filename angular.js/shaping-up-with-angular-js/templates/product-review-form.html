@@ -1,0 +1,34 @@
+<form name="reviewForm" ng-controller="ReviewController as reviewCtrl"
+                        ng-submit="reviewForm.$valid && reviewCtrl.addReview(product)"
+                        novalidate>
+  <blockquote>
+    <b>{{ reviewCtrl.review.stars }}
+      <ng-pluralize count="reviewCtrl.review.stars"
+        when="{'one': 'Star', 'other': 'Stars'}">
+      </ng-pluralize>
+    </b>
+    {{ reviewCtrl.review.body }}
+    <br />
+    <cite class="clearfix">-{{ reviewCtrl.review.author }}</cite>
+  </blockquote>
+
+  <fieldset class="form-group">
+  <select class="form-control" ng-model="reviewCtrl.review.stars"
+    ng-options="stars for stars in [5,4,3,2,1]"
+    title="Stars" required>
+      <option value="">Rate the Product</option>
+    </select>
+  </fieldset>
+  <fieldset class="form-group">
+    <textarea ng-model="reviewCtrl.review.body" class="form-control"
+      placeholder="Write a short review of the product..."
+      title="Review"></textarea>
+  </fieldset>
+  <fieldset class="form-group">
+    <input ng-model="reviewCtrl.review.author" type="email" class="form-control"
+    placeholder="jimmyDean@example.org" title="Email" required />
+  </fieldset>
+  <fieldset class="form-group">
+    <input type="submit" class="btn btn-primary pull-right" value="Submit Review" />
+  </fieldset>
+</form>

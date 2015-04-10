@@ -1,0 +1,8 @@
+<b>{{ review.stars }}
+  <ng-pluralize count="review.stars"
+    when="{'one': 'Star', 'other': 'Stars'}">
+  </ng-pluralize>
+</b>
+{{ review.body }}
+<br />
+<cite>-{{ review.author }} on {{ review.createdOn | date }}</cite>
