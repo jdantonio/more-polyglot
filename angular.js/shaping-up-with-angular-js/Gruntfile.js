@@ -5,6 +5,7 @@ module.exports = function(grunt){
     scripts: {
       src: ['bower_components/jquery/dist/jquery.js',
             'bower_components/angular/angular.js',
+            'products.js',
             'app.js'],
       dest: 'tmp/app.js'
     },
@@ -76,6 +77,15 @@ module.exports = function(grunt){
     //}
   }); 
 
+  grunt.loadNpmTasks('grunt-shell');
+  grunt.config('shell', {
+    serve: {
+      command: function() {
+        return 'http-server';
+      }
+    }
+  });
+
   grunt.registerTask('build:scripts', "Builds the javascript.",
                     ['concat:scripts', 'copy:scripts']);
                     //['concat:scripts', 'uglify']);
@@ -86,6 +96,8 @@ module.exports = function(grunt){
 
   grunt.registerTask('build', "Builds the application.",
                     ['build:scripts', 'build:styles']);
+
+  grunt.registerTask('serve', 'Build then run in a web server', ['build', 'shell:serve']);
 
   grunt.registerTask('default', 'Builds the application', ['build']);
 }
